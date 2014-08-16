@@ -8,8 +8,6 @@ RPubs - http://rpubs.com/ibanmd/24970
 ## Long Report
 RPubs - http://rpubs.com/ibanmd/24960
 
-
-
 #### Data
 Information about the dataset can be found at this URL: http://stat.ethz.ch/R-manual/R-devel/library/datasets/html/mtcars.html.  
 
