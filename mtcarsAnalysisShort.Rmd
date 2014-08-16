@@ -1,0 +1,148 @@
+# An Analysis of Fuel Efficiency by Transmission Type   
+
+## Summary
+The purpose of this analysis was to determine in what manner the type of transmission an automobile has affects its fuel efficiency in miles per gallon (MPG).  In addition to examining what effect transmission type has on MPG, the effects from other variables were also considered.  This was necessary because many of the variables were related.  For example, consider the variables Weight and Transmission Type.  Luxury cars are often large and heavy and come with automatic transmissions, so it may appear that automatic transmissions lead to lower MPG values, while it is in fact due to the high weight of the car.  What was found that in general, automobiles with manual transmission tend to have higher MPG than automatic transmission automobiles, but that this difference is not likely due to the transmission type.  Variables such as engine horse power and automobile weight are stronger predictors for MPG than transmission type.
+
+## Exploring the data
+
+```{r echo=FALSE}
+## Load the dataset into the variable "data"
+data <- mtcars
+attach(data)
+## A little cleaning of the data
+## First, make the transmission type a factor variable
+data[data$am==0,"am"] <- "Automatic"
+data[data$am==1,"am"] <- "Manual"
+data[,"am"] <- as.factor(data[,"am"])
+## Rename the variables
+names(data) <- c("MPG", "Cylinders", "Displacement", "Horsepower", "DRatio", "Weight", "QuarTime", "VS", "TransType", "Gears", "Carbs")
+```
+
+The analysis will begin with some visual exploration of the data.  The box plot below immediately gives us a possible indication that automobiles with manual transmissions appear to be more fuel efficient.  Automobiles with automatic transmissions have a median MPG of about `r median(data[data$TransType=="Automatic","MPG"])` while automobiles with manual transmissions have a median MPG of about `r median(data[data$TransType=="Manual","MPG"])`.  
+
+```{r echo=FALSE, fig.width=4 , fig.height=4}
+plot(data$MPG ~ data$TransType, xlab="Transmission Type", ylab="MPG (miles per gallon)", main="MPG by Transmission Type")
+```
+
+However, though automobiles with manual transmissions appear to be more fuel efficient in general, it is not possible to conclude at this point that this difference is due to transmission type solely.  It may be that all cars with manual transmissions happen to also be very light and have small engines.  In the Appendix is a pairs plot of some of variables in order to see how they relate to each other.
+
+```{r echo=FALSE, fig.width=8 , fig.height=8, include=FALSE}
+cols <- character(nrow(data))
+cols <- "black"
+cols[data$TransType == "Automatic"] <- "red"
+cols[data$TransType == "Manual"] <- "blue"
+pairs(data[,c(1,3,4,6,10)], main="Pairs plot (Automatic in Red, Manual in Blue)", col=cols)
+```
+
+A few expected correlations are immediately seen, for example, that Displacement and Horsepower are positively correlated.  Neither is it surprising that Weight and MPG have a negative correlation.  Another interesting relationship is that between Transmission Type and Gears (number of forward gears in the transmission).  We see that all automobiles with three gears are automatics, and all with five gears are manuals.  Automobiles with four gears are primarily manuals.  
+
+## Fitting a linear model
+
+Six predictors will be used in order to understand how transmission type relates to fuel efficiency.  Those six predictors are:
+- TransType
+- Cylinders
+- Displacement
+- Horsepower
+- Weight
+- Gears
+
+A linear model is fitted for the following six combinations of the six predictors, and then the anova() function in R is used to compare the six linear models.  The R output for these tests can be found in the long version of this report.
+
+```{r echo=FALSE, include=FALSE}
+fit1 <- lm(MPG ~ TransType, data)
+fit2 <- update(fit1, MPG ~ TransType + Horsepower)
+fit3 <- update(fit1, MPG ~ TransType + Horsepower + Weight)
+fit4 <- update(fit1, MPG ~ TransType + Horsepower + Weight + Displacement)
+fit5 <- update(fit1, MPG ~ TransType + Horsepower + Weight + Displacement + Gears)
+fit6 <- update(fit1, MPG ~ TransType + Horsepower + Weight + Displacement + Gears + Cylinders)
+```
+
+```{r echo=FALSE, include=FALSE}
+anova(fit1,fit2,fit3,fit4,fit5,fit6)
+```
+
+The results of the anova test indicate that the model including TransType, Horsepower, and Weight would be a reasonable model to select, due to the fact that the next largest model has a large p-value, indicating that it is not very different from our selection.  Furthermore, it is reasonable that engine horsepower and the weight of the automobile are important predictors.  Leaving Displacement out of model is also justified due to the fact that it is highly correlated with both Weight and Horsepower, which were included.
+
+## Diagnostics
+```{r echo=FALSE, fig.height=10, fig.width=10, include=FALSE}
+par(mfrow=c(2,2))
+plot(fit3, col=cols, main="Automatic in Red, Manual in Blue")
+```
+For a plot of diagnostics, please refer to the Appendix.  The first plot, Residuals by Fitted values, shows that the constant variance assumption is reasonably met and that the data is reasonably linear.  The second plot (going by rows) confirms that the residuals have an approximately normal distribution.  Conducting the Shapiro-Wilk test for the normality of the residuals gives a p-value of `r  shapiro.test(resid(fit3))$p.value`, meaning that there is not quite enough evidence to suggest the residuals are non-normal.  These plots also highlight a few outliers, namely the Chrysler Imperial, the Toyota Corolla, and the Fiat 128.  For now, since the model assumptions are being met and since the value of R^2 is `r summary(fit3)$r.squared` with just three predictors, we can leave further investigation for another time.
+
+```{r echo=FALSE, include=FALSE}
+data[c("Toyota Corolla","Fiat 128"),]
+```
+
+## Results & Conclusions
+
+Let us take a look again at the chosen model, which uses TransType, Horsepower, and Weight to predict MPG.
+
+```{r echo=FALSE}
+summary(fit3)
+```
+
+```{r echo=FALSE, fig.width=10, fig.height=4, include=FALSE}
+library(visreg)
+par(mfrow=c(1,3))
+visreg(fit3)
+```
+
+We see that on average an automobile with a manual transmission gets `r round(summary(fit3)$coefficients[2,1],2)` more MPG than an automobile with an automatic transmission, if the amount of horsepower and the weight of the automobile are held constant.  However, this estimate has a p-value of `r round(summary(fit3)$coefficients[2,4],2)`, which is higher than ideal (meaning not very significant).  It is the case that on average, each additional 10 horsepower translates into `r abs(round(summary(fit3)$coefficients[3,1],2)*10)` fewer MPG.  Likewise, each additional 100 pounds the car weighs leads to a drop in MPG of `r abs(round(summary(fit3)$coefficients[4,1],2)/10)`.
+
+### answering our two questions...
+
+1) **Is an automatic or manual transmission better for MPG?**
+- Answer: The data suggests that when ignoring all other variables and focusing solely on transmission type, a car with a manual transmission will get more MPG than a car with an automatic transmission.  Running a t-test on the MPG values:
+
+```{r echo=FALSE, include=FALSE}
+autoMPG <- data[data$TransType=="Automatic","MPG"]
+manuMPG <- data[data$TransType=="Manual","MPG"]
+ttest <- t.test(autoMPG, manuMPG)
+ttest
+```
+We can say that a typical manual automobile gets about `r round(ttest$estimate[2] - ttest$estimate[1], 2)` more MPG than automatic one, and this value is significantly different than 0.  However, if an automobile's horsepower and weight are taken into account, that difference in MPG drops to `r round(summary(fit3)$coefficients[2,1],2)`, and that difference is no longer considered significant.  If the question refers to the vehicle in general, then yes, driving an automobile with a manual transmission will very likely secure you a higher MPG.  If the question refers to specifically the transmission, then though a manual transmission appears to give you about `r round(summary(fit3)$coefficients[2,1],2)` extra MPG, it cannot be confidently said that this difference is significantly different than a difference of 0. 
+
+2) **Quantify the MPG difference between automatic and manual transmissions.**
+- Answer: Basically reiterating from the previous question and answer, automobiles with manual transmissions tend to have get about `r round(ttest$estimate[2] - ttest$estimate[1],2)` more MPG than automobiles with automatic transmissions.  However, for a given weight and horsepower, a manual transmission will deliver about `r round(summary(fit3)$coefficients[2,1],2)` more MPG than an automatic transmission.
+
+# Appendix
+
+### Pairs Plot
+```{r echo=FALSE, fig.width=6 , fig.height=6}
+cols <- character(nrow(data))
+cols <- "black"
+cols[data$TransType == "Automatic"] <- "red"
+cols[data$TransType == "Manual"] <- "blue"
+pairs(data[,c(1,3,4,6,10)], main="Pairs plot (Automatic in Red, Manual in Blue)", col=cols)
+```
+
+<!--### Model fitting and anova test-->
+```{r echo=FALSE, include=TRUE}
+fit1 <- lm(MPG ~ TransType, data)
+fit2 <- update(fit1, MPG ~ TransType + Horsepower)
+fit3 <- update(fit1, MPG ~ TransType + Horsepower + Weight)
+fit4 <- update(fit1, MPG ~ TransType + Horsepower + Weight + Displacement)
+fit5 <- update(fit1, MPG ~ TransType + Horsepower + Weight + Displacement + Gears)
+fit6 <- update(fit1, MPG ~ TransType + Horsepower + Weight + Displacement + Gears + Cylinders)
+```
+
+```{r echo=FALSE, include=FALSE}
+anova(fit1,fit2,fit3,fit4,fit5,fit6)
+```
+
+### Diagnostics
+
+```{r echo=FALSE, fig.height=6, fig.width=6}
+par(mfrow=c(2,2))
+plot(fit3, col=cols, main="Automatic in Red, Manual in Blue")
+```
+
+### Linear model visualization
+
+```{r echo=FALSE, fig.width=6, fig.height=3, include=TRUE}
+library(visreg)
+par(mfrow=c(1,3))
+visreg(fit3)
+```
+

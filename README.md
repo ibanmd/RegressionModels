@@ -1,6 +1,14 @@
 # README for An Analysis of Fuel Efficiency by Transmission Type
 
-This is the course project for the August 2014 offering of Regression Models by JHU in Coursera.  The R Markdown file in the repository was used to create a finished report which is published at http://rpubs.com/ibanmd/24960 .
+This is the course project for the August 2014 offering of Regression Models by JHU in Coursera.  To follow instructions, I kept my submission to 5 pages, including an appendix with figures.  However, I also created a longer version that is about 9 pages which I feel is a better report and more interesting and enjoyable to read.  My grader is encouraged to grade the 5 page report since that was the assignment instruction, but is encouraged to ignore the instruction and simply read the long version.  The .pdf that was turned into the Coursera online class was the short version.
+
+## Short Report
+RPubs - http://rpubs.com/ibanmd/24970
+
+## Long Report
+RPubs - http://rpubs.com/ibanmd/24960
+
+
 
 #### Data
 Information about the dataset can be found at this URL: http://stat.ethz.ch/R-manual/R-devel/library/datasets/html/mtcars.html.  

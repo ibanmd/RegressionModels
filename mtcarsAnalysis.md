@@ -105,7 +105,7 @@ One interesting thing to note is the similarities between the Toyota Corolla and
 ## PredictedMPG 28.37          27.28   
 ## ErrorMPG     5.532          5.120
 ```
-Not only are the two automobiles similar in our three predictor variables, but also equivalent or similar in Cylinders, Displacement, DRatio, QuarTime, Gears, Carbs, and even (true) MPG!  As expected, the model makes a similar MPG prediction for both automobiles, of about 27 to 28 MPG.  For both, this prediction is about 5 MPG too low.  To improve this model, it may be possible to find out why the model underestimates their MPG and perhaps make an adjustment.  For now, since the model assumptions are being met and since the value of $R^2$ is 0.8399 with just three predictors, we can leave further investigation for another time.
+Not only are the two automobiles similar in our three predictor variables, but also equivalent or similar in Cylinders, Displacement, DRatio, QuarTime, Gears, Carbs, and even (true) MPG!  As expected, the model makes a similar MPG prediction for both automobiles, of about 27 to 28 MPG.  For both, this prediction is about 5 MPG too low.  To improve this model, it may be possible to find out why the model underestimates their MPG and perhaps make an adjustment.  For now, since the model assumptions are being met and since the value of R^2 is 0.8399 with just three predictors, we can leave further investigation for another time.
 
 ## Results & Conclusions
 
