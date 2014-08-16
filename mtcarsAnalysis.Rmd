@@ -108,7 +108,7 @@ par(mfrow=c(1,3))
 visreg(fit3)
 ```
 
-We see that on average an automobile with a manual transmission gets `r round(summary(fit3)$coefficients[2,1],2)` more MPG than an automobile with an automatic transmission, if the amount of horsepower and the weight of the automobile are held constant.  However, this estimate has a p-value of `r round(summary(fit3)$coefficients[2,4],2)`, which is higher than ideal (meaning not very significant).  
+We see that on average an automobile with a manual transmission gets `r round(summary(fit3)$coefficients[2,1],2)` more MPG than an automobile with an automatic transmission, if the amount of horsepower and the weight of the automobile are held constant.  However, this estimate has a p-value of `r round(summary(fit3)$coefficients[2,4],2)`, which is higher than ideal (meaning not very significant).  It is the case that on average, each additional 10 horsepower translates into `r abs(round(summary(fit3)$coefficients[3,1],2)*10)` fewer MPG.  Likewise, each additional 100 pounds the car weighs leads to a drop in MPG of `r abs(round(summary(fit3)$coefficients[4,1],2)/10)`.
 
 ### answering our two questions...
 

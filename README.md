@@ -4,6 +4,8 @@ This is the course project for the August 2014 offering of Regression Models by 
 
 ## Short Report
 RPubs - http://rpubs.com/ibanmd/24970
+PDF download - https://github.com/ibanmd/RegressionModels/blob/master/mtcarsAnalysisShort.pdf?raw=true
+Github markdown - https://github.com/ibanmd/RegressionModels/blob/master/mtcarsAnalysisShort.md
 
 ## Long Report
 RPubs - http://rpubs.com/ibanmd/24960
