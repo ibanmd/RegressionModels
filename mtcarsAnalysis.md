@@ -138,7 +138,7 @@ Let us also take a look at a visualization of our model, which shows the small d
 
 ![plot of chunk unnamed-chunk-11](figure/unnamed-chunk-11.png) 
 
-We see that on average an automobile with a manual transmission gets 2.08 more MPG than an automobile with an automatic transmission, if the amount of horsepower and the weight of the automobile are held constant.  However, this estimate has a p-value of 0.14, which is higher than ideal (meaning not very significant).  
+We see that on average an automobile with a manual transmission gets 2.08 more MPG than an automobile with an automatic transmission, if the amount of horsepower and the weight of the automobile are held constant.  However, this estimate has a p-value of 0.14, which is higher than ideal (meaning not very significant).  It is the case that on average, each additional 10 horsepower translates into 0.4 fewer MPG.  Likewise, each additional 100 pounds the car weighs leads to a drop in MPG of 0.288.
 
 ### answering our two questions...
 
