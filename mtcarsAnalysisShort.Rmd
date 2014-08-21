@@ -1,3 +1,6 @@
+---
+output: pdf_document
+---
 # An Analysis of Fuel Efficiency by Transmission Type   
 
 ## Summary
